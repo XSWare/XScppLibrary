@@ -42,4 +42,9 @@
       <Filter>Events</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Observer.tpp">
+      <Filter>Events</Filter>
+    </None>
+  </ItemGroup>
 </Project>

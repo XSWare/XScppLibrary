@@ -1,6 +1,5 @@
 #pragma once
 
-#include "IEvent.h"
 #include <functional>
 #include <map>
 

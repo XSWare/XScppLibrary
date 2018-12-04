@@ -24,7 +24,7 @@ void EventBase<T>::Unsubscribe(int ID)
 template<class T>
 void Event<T>::Invoke(T param, int invokerID)
 {
-	for (auto & entry : m_subscribers)
+	for (auto & entry : this->m_subscribers)
 	{
 		if (entry.first != invokerID)
 			entry.second(param);
@@ -33,7 +33,7 @@ void Event<T>::Invoke(T param, int invokerID)
 
 void Event<void>::Invoke(int invokerID)
 {
-	for (auto & entry : m_subscribers)
+	for (auto & entry : this->m_subscribers)
 	{
 		if (entry.first != invokerID)
 			entry.second();
