@@ -33,6 +33,9 @@ namespace XSLibrary
 		virtual void Unsubscribe(int ID) override;
 		void Invoke(Args... args);
 
+		int operator += (Delegate<Args...> eventHandle);
+		void operator -= (int ID);
+
 	private:
 		std::map<int, Delegate<Args...>> m_subscribers;
 		int m_nextID;
@@ -60,5 +63,17 @@ namespace XSLibrary
 	{
 		for (auto & entry : this->m_subscribers)
 			entry.second(args...);
+	}
+
+	template<typename ...Args>
+	int Event<Args...>::operator+=(Delegate<Args...> eventHandle)
+	{
+		return Subscribe(eventHandle);
+	}
+
+	template<typename ...Args>
+	void Event<Args...>::operator-=(int ID)
+	{
+		Unsubscribe(ID);
 	}
 }
