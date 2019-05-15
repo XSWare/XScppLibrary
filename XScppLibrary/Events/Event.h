@@ -34,7 +34,7 @@ namespace XSLibrary
 		void Invoke(Args... args);
 
 	private:
-		std::map<int, Delegate<Args>> m_subscribers;
+		std::map<int, Delegate<Args...>> m_subscribers;
 		int m_nextID;
 	};
 
@@ -59,6 +59,6 @@ namespace XSLibrary
 	void Event<Args...>::Invoke(Args... args)
 	{
 		for (auto & entry : this->m_subscribers)
-			entry.second(args);
+			entry.second(args...);
 	}
 }

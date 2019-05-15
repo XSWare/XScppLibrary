@@ -8,7 +8,11 @@ namespace XSLibrary
 	class Observer
 	{
 	public:
-		virtual ~Observer();
+		virtual ~Observer()
+		{
+			for (auto & entry : m_subscriptions)
+				entry.second->Unsubscribe(entry.first);
+		}
 
 		template<typename... Args>
 		void AddEvent(std::shared_ptr<Event<Args...>> event_, Delegate<Args...> action);
