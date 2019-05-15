@@ -1,7 +1,8 @@
 #pragma once
 
 #include <functional>
-#include <map>
+#include <vector>
+#include <memory>
 
 namespace XSLibrary
 {
@@ -14,66 +15,71 @@ namespace XSLibrary
 	template <typename... Args>
 	using Delegate = typename SelectFunctionType<Args...>::type;
 
-	class IEvent
+	class Subscription
 	{
 	public:
-		virtual void Unsubscribe(int ID) = 0;
+		Subscription(std::shared_ptr<void> && delegatePointer)
+			: m_delegatePointer(std::move(delegatePointer))
+		{
+		}
+
+		void Unsubscribe()
+		{
+			m_delegatePointer = nullptr;
+		}
+
+	private:
+		std::shared_ptr<void> m_delegatePointer;
 	};
 
 	template <typename... Args>
-	class Event : public IEvent
+	class Event
 	{
 	public:
-		Event()
-		{
-			m_nextID = 0;
-		}
-
-		int Subscribe(Delegate<Args...> eventHandle);
-		virtual void Unsubscribe(int ID) override;
+		Subscription Subscribe(Delegate<Args...> eventHandle);
 		void Invoke(Args... args);
 
-		int operator += (Delegate<Args...> eventHandle);
-		void operator -= (int ID);
+		Subscription operator += (Delegate<Args...> eventHandle);
+		void operator() (Args... args);
 
 	private:
-		std::map<int, Delegate<Args...>> m_subscribers;
-		int m_nextID;
+		std::vector<std::weak_ptr<Delegate<Args...>>> m_subscribers;
 	};
 
-	template<typename... Args>
-	int Event<Args...>::Subscribe(Delegate<Args...> eventHandle)
+	template<typename ...Args>
+	Subscription Event<Args...>::Subscribe(Delegate<Args...> eventHandle)
 	{
-		if (m_nextID == -1)
-			m_nextID++;
+		std::shared_ptr<Delegate<Args...>> delegatePointer = std::make_shared<Delegate<Args...>>(eventHandle);
 
-		m_subscribers[m_nextID] = eventHandle;
+		this->m_subscribers.push_back(delegatePointer);
 
-		return m_nextID++;
-	}
-
-	template<typename... Args>
-	void Event<Args...>::Unsubscribe(int ID)
-	{
-		m_subscribers.erase(ID);
+		return Subscription(std::move(delegatePointer));
 	}
 
 	template<typename... Args>
 	void Event<Args...>::Invoke(Args... args)
-	{
-		for (auto & entry : this->m_subscribers)
-			entry.second(args...);
+	{	
+		for (auto it = this->m_subscribers.begin(); it < this->m_subscribers.end();)
+		{
+			if (auto sharedDelegatePointer = it->lock())
+			{
+				(*sharedDelegatePointer)(args...);
+				it++;
+			}
+			else
+				it = this->m_subscribers.erase(it);
+		}
 	}
 
-	template<typename ...Args>
-	int Event<Args...>::operator+=(Delegate<Args...> eventHandle)
+	template<typename... Args>
+	Subscription Event<Args...>::operator+=(Delegate<Args...> eventHandle)
 	{
 		return Subscribe(eventHandle);
 	}
 
-	template<typename ...Args>
-	void Event<Args...>::operator-=(int ID)
+	template<typename... Args>
+	void Event<Args...>::operator()(Args... args)
 	{
-		Unsubscribe(ID);
+		Invoke(args...);
 	}
 }
