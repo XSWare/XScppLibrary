@@ -8,15 +8,20 @@ namespace XSLibrary
 	class Observer
 	{
 	public:
-		Observer();
 		virtual ~Observer();
 
-		template<class T>
-		void AddEvent(std::shared_ptr<Event<T>> event_, Delegate<T> action);
+		template<typename... Args>
+		void AddEvent(std::shared_ptr<Event<Args...>> event_, Delegate<Args...> action);
 
 	private:
 		std::map<int, std::shared_ptr<IEvent>> m_subscriptions;
 	};
 
-#include "Observer.tpp"
+	template<typename ...Args>
+	void Observer::AddEvent(std::shared_ptr<Event<Args...>> event_, Delegate<Args...> action)
+	{
+		int ID = event_->Subscribe(action);
+		std::shared_ptr<IEvent> basePtr = std::static_pointer_cast<IEvent>(event_);
+		m_subscriptions[ID] = basePtr;
+	}
 }

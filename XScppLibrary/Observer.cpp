@@ -2,10 +2,6 @@
 
 namespace XSLibrary
 {
-	Observer::Observer()
-	{
-	}
-	
 	Observer::~Observer()
 	{
 		for (auto & entry : m_subscriptions)

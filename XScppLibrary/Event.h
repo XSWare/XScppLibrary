@@ -5,22 +5,14 @@
 
 namespace XSLibrary
 {
-	const int INVOKE_ALL = -1;
-
-	template <typename T>
+	template <typename... Args>
 	struct SelectFunctionType
 	{
-		using type = std::function<void(T)>;
-	};
-
-	template <>
-	struct SelectFunctionType<void>
-	{
-		using type = std::function<void()>;
+		using type = std::function<void(Args...)>;
 	};
 	
-	template <typename T>
-	using Delegate = typename SelectFunctionType<T>::type;
+	template <typename... Args>
+	using Delegate = typename SelectFunctionType<Args...>::type;
 
 	class IEvent
 	{
@@ -28,35 +20,45 @@ namespace XSLibrary
 		virtual void Unsubscribe(int ID) = 0;
 	};
 
-	template <class T>
-	class EventBase : public IEvent
+	template <typename... Args>
+	class Event : public IEvent
 	{
 	public:
-		EventBase();
+		Event()
+		{
+			m_nextID = 0;
+		}
 
-		int Subscribe(Delegate<T> eventHandle);
+		int Subscribe(Delegate<Args...> eventHandle);
 		virtual void Unsubscribe(int ID) override;
-
-	protected:
-		std::map<int, Delegate<T>> m_subscribers;
+		void Invoke(Args... args);
 
 	private:
+		std::map<int, Delegate<Args>> m_subscribers;
 		int m_nextID;
 	};
 
-	template <class T>
-	class Event : public EventBase<T>
+	template<typename... Args>
+	int Event<Args...>::Subscribe(Delegate<Args...> eventHandle)
 	{
-	public:
-		void Invoke(T param, int invokerID = INVOKE_ALL);
-	};
+		if (m_nextID == -1)
+			m_nextID++;
 
-	template<>
-	class Event<void> : public EventBase<void>
+		m_subscribers[m_nextID] = eventHandle;
+
+		return m_nextID++;
+	}
+
+	template<typename... Args>
+	void Event<Args...>::Unsubscribe(int ID)
 	{
-	public:
-		void Invoke(int invokerID = INVOKE_ALL);
-	};
+		m_subscribers.erase(ID);
+	}
 
-#include "Event.tpp"
+	template<typename... Args>
+	void Event<Args...>::Invoke(Args... args)
+	{
+		for (auto & entry : this->m_subscribers)
+			entry.second(args);
+	}
 }

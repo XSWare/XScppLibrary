@@ -35,16 +35,8 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Event.tpp">
-      <Filter>Events</Filter>
-    </ClCompile>
     <ClCompile Include="Observer.cpp">
       <Filter>Events</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Observer.tpp">
-      <Filter>Events</Filter>
-    </None>
   </ItemGroup>
 </Project>
