@@ -19,5 +19,8 @@
     <ClInclude Include="Events\Observer.h">
       <Filter>Events</Filter>
     </ClInclude>
+    <ClInclude Include="Events\MarshaledEvent.h">
+      <Filter>Events</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
