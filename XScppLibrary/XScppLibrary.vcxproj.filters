@@ -16,10 +16,10 @@
     <ClInclude Include="Events\Event.h">
       <Filter>Events</Filter>
     </ClInclude>
-    <ClInclude Include="Events\Observer.h">
+    <ClInclude Include="Events\MarshaledEvent.h">
       <Filter>Events</Filter>
     </ClInclude>
-    <ClInclude Include="Events\MarshaledEvent.h">
+    <ClInclude Include="Events\EventHandler.h">
       <Filter>Events</Filter>
     </ClInclude>
   </ItemGroup>

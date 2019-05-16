@@ -4,7 +4,7 @@
 
 namespace XSLibrary
 {
-	class Observer
+	class EventHandler
 	{
 	public:
 		template<typename... Args>
@@ -15,7 +15,7 @@ namespace XSLibrary
 	};
 
 	template<typename ...Args>
-	void Observer::AddEvent(Event<Args...> & event_, Delegate<Args...> action)
+	void EventHandler::AddEvent(Event<Args...> & event_, Delegate<Args...> action)
 	{
 		m_subscriptions.push_back(event_.Subscribe(action));
 	}
