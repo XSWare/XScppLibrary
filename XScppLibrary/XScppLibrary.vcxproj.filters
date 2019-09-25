@@ -8,6 +8,9 @@
     <Filter Include="Events">
       <UniqueIdentifier>{5ad08228-ab7a-4077-9780-836967ef04ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DependencyObjects">
+      <UniqueIdentifier>{c33bec28-ea98-4d71-aa7c-8793a4cf8e09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -21,6 +24,12 @@
     </ClInclude>
     <ClInclude Include="Events\EventHandler.h">
       <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="DependencyObjects\Dependency.h">
+      <Filter>DependencyObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="DependencyObjects\DependencyValue.h">
+      <Filter>DependencyObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
