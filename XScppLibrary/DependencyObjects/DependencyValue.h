@@ -15,7 +15,7 @@ namespace XSLibrary
 		DependencyValue(T const& value);
 
 		virtual T GetValue() const;
-		virtual void SetValue(T const& value);
+		virtual void SetValue(T const& value, void * sender = nullptr);
 
 		void operator=(T const& value);
 		bool operator==(T const& value) const;
@@ -46,12 +46,12 @@ namespace XSLibrary
 		return m_value;
 	}
 	template<class T>
-	inline void DependencyValue<T>::SetValue(T const & value)
+	inline void DependencyValue<T>::SetValue(T const & value, void * sender)
 	{
 		if (m_value != value)
 		{
 			m_value = value;
-			ValueChanged.Invoke(this, value);
+			ValueChanged.Invoke(sender ? sender : this, value);
 		}
 	}
 
