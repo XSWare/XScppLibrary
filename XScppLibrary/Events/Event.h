@@ -18,6 +18,11 @@ namespace XSLibrary
 	class Subscription
 	{
 	public:
+		Subscription()
+		{
+			Unsubscribe();
+		}
+
 		Subscription(std::shared_ptr<void> && delegatePointer)
 			: m_delegatePointer(std::move(delegatePointer))
 		{
