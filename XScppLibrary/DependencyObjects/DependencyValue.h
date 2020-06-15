@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Dependency.h"
-#include "../Events/EventHandler.h"
+#include "../Events/SubscriptionStash.h"
 
 namespace XSLibrary
 {
 	template<class T>
-	class DependencyValue : public Dependency, public EventHandler
+	class DependencyValue : public Dependency, private SubscriptionStash
 	{
 	public:
 		Event<void*, T> ValueChanged;

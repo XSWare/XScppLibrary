@@ -22,14 +22,14 @@
     <ClInclude Include="Events\MarshaledEvent.h">
       <Filter>Events</Filter>
     </ClInclude>
-    <ClInclude Include="Events\EventHandler.h">
-      <Filter>Events</Filter>
-    </ClInclude>
     <ClInclude Include="DependencyObjects\Dependency.h">
       <Filter>DependencyObjects</Filter>
     </ClInclude>
     <ClInclude Include="DependencyObjects\DependencyValue.h">
       <Filter>DependencyObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\SubscriptionStash.h">
+      <Filter>Events</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

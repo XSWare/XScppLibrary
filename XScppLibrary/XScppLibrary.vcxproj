@@ -151,7 +151,7 @@
     <ClInclude Include="DependencyObjects\DependencyValue.h" />
     <ClInclude Include="Events\Event.h" />
     <ClInclude Include="Events\MarshaledEvent.h" />
-    <ClInclude Include="Events\EventHandler.h" />
+    <ClInclude Include="Events\SubscriptionStash.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
