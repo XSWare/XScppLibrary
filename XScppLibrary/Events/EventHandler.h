@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Event.h"
+#include <map>
 
 namespace XSLibrary
 {
@@ -8,15 +9,34 @@ namespace XSLibrary
 	{
 	public:
 		template<typename... Args>
-		void Subscribe(Event<Args...> & event_, Delegate<Args...> action);
+		void Subscribe(Event<Args...>& event_, Delegate<Args...> action);
+		template<typename... Args>
+		void Relay(Event<Args...>& event_, Event<Args...>& relay);
+		template<typename... Args>
+		void Unsubscribe(Event<Args...>& event_);
 
 	private:
-		std::vector<Subscription> m_subscriptions;
+		std::map<void*, Subscription> m_subscriptions;
 	};
 
 	template<typename ...Args>
-	void EventHandler::Subscribe(Event<Args...> & event_, Delegate<Args...> action)
+	inline void EventHandler::Subscribe(Event<Args...>& event_, Delegate<Args...> action)
 	{
-		m_subscriptions.push_back(event_.Subscribe(action));
+		m_subscriptions[&event_] = event_.Subscribe(action);
+	}
+
+	template<typename ...Args>
+	inline void EventHandler::Relay(Event<Args...>& event_, Event<Args...>& relay)
+	{
+		Subscribe(event_, [&relay](Args... args)
+			{
+				relay.Invoke(args...);
+			});
+	}
+
+	template<typename ...Args>
+	inline void EventHandler::Unsubscribe(Event<Args...>& event_)
+	{
+		m_subscriptions.erase(&event_);
 	}
 }
